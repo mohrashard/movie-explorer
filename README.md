@@ -205,8 +205,4 @@ npm test
 
 ## 👨‍💻 Author
 
-Mohammad Rashard
-
----
-
-This project was created as part of a web development assignment, implementing all required features and following best practices for React application development.
+Mohamed Rashard
