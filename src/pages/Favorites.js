@@ -20,6 +20,7 @@ import {
 import { useMovie } from '../contexts/MovieContext';
 import MovieCard from '../components/MovieCard';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 const GradientText = styled(Typography)(({ theme }) => ({
   background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
@@ -34,6 +35,7 @@ const Favorites = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleRemoveConfirmation = (movieId, movieTitle) => {
     setSelectedMovie({ id: movieId, title: movieTitle });
@@ -50,8 +52,12 @@ const Favorites = () => {
 
   const handleClose = () => setOpenDialog(false);
 
+  // Function to navigate to Home page
+  const handleExploreMovies = () => {
+    navigate('/home'); // Navigate to the Home page
+  };
+
   const groupMoviesByGenre = () => {
-    // Expanded genre list (add more as needed)
     const allGenres = [
       'Action', 'Drama', 'Sci-Fi', 'Comedy', 'Horror',
       'Romance', 'Thriller', 'Fantasy', 'Mystery',
@@ -61,23 +67,20 @@ const Favorites = () => {
     const groupedMovies = {};
   
     favorites.forEach(movie => {
-      // Ensure genres exist and are properly formatted
       const movieGenres = Array.isArray(movie.genres) 
         ? movie.genres.map(g => g.trim())
         : [];
   
-      // Add to 'General' category if no genres specified
       if (movieGenres.length === 0) {
         if (!groupedMovies.General) groupedMovies.General = [];
         groupedMovies.General.push(movie);
         return;
       }
   
-      // Group by validated genres
       movieGenres.forEach(genre => {
         const normalizedGenre = allGenres.includes(genre) 
           ? genre 
-          : 'Other';  // Category for unspecified genres
+          : 'Other';
   
         if (!groupedMovies[normalizedGenre]) {
           groupedMovies[normalizedGenre] = [];
@@ -89,7 +92,6 @@ const Favorites = () => {
       });
     });
   
-    // Sort genres by popularity and maintain order
     return Object.entries(groupedMovies)
       .sort((a, b) => b[1].length - a[1].length)
       .sort((a, b) => a[0] === 'Other' ? 1 : -1);
@@ -148,6 +150,7 @@ const Favorites = () => {
                     py: 1.5,
                     fontSize: '1.1rem',
                   }}
+                  onClick={handleExploreMovies} 
                 >
                   Explore Movies
                 </Button>

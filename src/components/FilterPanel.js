@@ -26,7 +26,7 @@ import {
 } from '@mui/icons-material';
 import { getGenres } from '../services/api';
 import { alpha } from '@mui/material/styles';
-import debounce from 'lodash/debounce'; // Import debounce from lodash
+import debounce from 'lodash/debounce';
 
 const FilterPanel = React.memo(({ onApplyFilters }) => {
   const theme = useTheme();
@@ -55,7 +55,7 @@ const FilterPanel = React.memo(({ onApplyFilters }) => {
     setExpanded(prev => !prev);
   }, []);
 
-  // Debounced function for handling rating changes to reduce re-renders
+
   const debouncedHandleRatingChange = useMemo(
     () =>
       debounce((newValue) => {
@@ -85,12 +85,11 @@ const FilterPanel = React.memo(({ onApplyFilters }) => {
     onApplyFilters(filters);
   }, [filters, onApplyFilters]);
 
-  // Memoized formatRating to prevent unnecessary re-computations
   const formatRating = useCallback((value) => {
     return value.toFixed(1);
   }, []);
 
-  // Memoized rating indicators to prevent re-rendering on every state change
+  
   const renderRatingIndicators = useMemo(() => {
     const minRating = filters.rating[0];
     const maxRating = filters.rating[1];
@@ -171,7 +170,7 @@ const FilterPanel = React.memo(({ onApplyFilters }) => {
     );
   }, [filters.rating, theme.palette.primary.main]);
 
-  // Memoized genre options to prevent re-rendering on every state change
+
   const genreOptions = useMemo(() => {
     return [
       <MenuItem key="all" value="">
