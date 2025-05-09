@@ -12,7 +12,10 @@ export const saveFavorite = (movie) => {
         poster_path: movie.poster_path,
         vote_average: movie.vote_average,
         release_date: movie.release_date,
-        overview: movie.overview
+        // Ensure overview is never null or undefined
+        overview: movie.overview || 'No description available.',
+        // Include genres if available (might be needed for grouping in favorites)
+        genres: movie.genres || []
       };
       
       favorites.push(movieToStore);
@@ -43,7 +46,16 @@ export const removeFavorite = (movieId) => {
 export const getFavorites = () => {
   try {
     const favorites = localStorage.getItem('favorites');
-    return favorites ? JSON.parse(favorites) : [];
+    const parsedFavorites = favorites ? JSON.parse(favorites) : [];
+    
+    // Normalize data - ensure all movies have required properties
+    return parsedFavorites.map(movie => ({
+      ...movie,
+      // Make sure overview is always a string
+      overview: movie.overview || 'No description available.',
+      // Ensure genres exist
+      genres: movie.genres || []
+    }));
   } catch (error) {
     console.error('Error getting favorites:', error);
     return [];

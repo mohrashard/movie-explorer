@@ -207,8 +207,8 @@ const MovieDetails = () => {
       {/* Hero Section */}
       <Box sx={{ 
         position: 'relative',
-        height: { xs: '50vh', md: '80vh' },
-        overflow: 'hidden',
+        minHeight: { xs: '50vh', md: '80vh' }, // Changed from height to minHeight
+        overflow: 'visible', // Allow content to overflow naturally
       }}>
         <img
           src={backdropPath}
@@ -258,11 +258,11 @@ const MovieDetails = () => {
         <Container maxWidth="lg" sx={{ 
           position: 'relative', 
           zIndex: 2,
-          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
-          pb: 6
+          pb: { xs: 8, md: 10 }, // Increased padding-bottom for longer content
+          pt: 4 // Added padding-top to balance spacing
         }}>
           <Grid container spacing={4} alignItems="flex-end">
             <Grid item xs={12}>
@@ -371,11 +371,9 @@ const MovieDetails = () => {
                   color: theme.palette.text.primary,
                   textShadow: theme.palette.mode === 'dark' ? '0 1px 2px rgba(255,255,255,0.1)' : '0 1px 2px rgba(0,0,0,0.4)',
                   maxWidth: { xs: '100%', md: '70%' },
-                  display: '-webkit-box',
-                  WebkitLineClamp: { xs: 3, sm: 5 },
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
+                  lineHeight: 1.6,
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                  whiteSpace: 'pre-wrap', // Ensure text wraps naturally
                 }}
               >
                 {movie.overview || 'No overview available.'}

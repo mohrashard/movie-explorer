@@ -20,7 +20,7 @@ import {
 import { useMovie } from '../contexts/MovieContext';
 import MovieCard from '../components/MovieCard';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 
 const GradientText = styled(Typography)(({ theme }) => ({
   background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
@@ -35,7 +35,7 @@ const Favorites = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   const handleRemoveConfirmation = (movieId, movieTitle) => {
     setSelectedMovie({ id: movieId, title: movieTitle });
@@ -52,10 +52,15 @@ const Favorites = () => {
 
   const handleClose = () => setOpenDialog(false);
 
-  // Function to navigate to Home page
   const handleExploreMovies = () => {
-    navigate('/home'); // Navigate to the Home page
+    navigate('/home');
   };
+
+
+  const normalizedFavorites = favorites.map(movie => ({
+    ...movie,
+    overview: movie.overview || 'No description available.'
+  }));
 
   const groupMoviesByGenre = () => {
     const allGenres = [
@@ -66,9 +71,10 @@ const Favorites = () => {
   
     const groupedMovies = {};
   
-    favorites.forEach(movie => {
+    normalizedFavorites.forEach(movie => {
+    
       const movieGenres = Array.isArray(movie.genres) 
-        ? movie.genres.map(g => g.trim())
+        ? movie.genres.map(g => typeof g === 'object' ? g.name : g).map(g => g.trim())
         : [];
   
       if (movieGenres.length === 0) {
@@ -94,10 +100,13 @@ const Favorites = () => {
   
     return Object.entries(groupedMovies)
       .sort((a, b) => b[1].length - a[1].length)
-      .sort((a, b) => a[0] === 'Other' ? 1 : -1);
+      .sort((a, b) => a[0] === 'Other' ? 1 : b[0] === 'Other' ? -1 : 0);
   };
 
   const groupedFavorites = groupMoviesByGenre();
+
+  // For debugging purposes
+  console.log("Normalized favorites:", normalizedFavorites);
 
   return (
     <Box sx={{ 
@@ -125,7 +134,7 @@ const Favorites = () => {
             mb: 6,
           }} />
 
-          {favorites.length === 0 ? (
+          {normalizedFavorites.length === 0 ? (
             <Paper sx={{ 
               p: 6,
               textAlign: 'center',
@@ -161,7 +170,7 @@ const Favorites = () => {
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
                   <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Your Collection • {favorites.length} Titles
+                    Your Collection • {normalizedFavorites.length} Titles
                   </Typography>
                 </Box>
 
@@ -191,19 +200,7 @@ const Favorites = () => {
                       display: 'grid',
                       gridTemplateColumns: `repeat(auto-fill, minmax(${isMobile ? '160px' : '220px'}, 1fr))`,
                       gap: 3,
-                      overflowX: 'auto',
                       pb: 2,
-                      scrollSnapType: 'x mandatory',
-                      '& > *': {
-                        scrollSnapAlign: 'start',
-                      },
-                      '&::-webkit-scrollbar': {
-                        height: '6px',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.4),
-                        borderRadius: '4px',
-                      },
                     }}>
                       {movies.map(movie => (
                         <MovieCard
