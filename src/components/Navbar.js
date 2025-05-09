@@ -32,7 +32,7 @@ import {
   Theaters as TheatersIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
-import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'; 
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../contexts/ThemeContext';
@@ -64,7 +64,7 @@ const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const { mode, toggleTheme } = useCustomTheme();
   const navigate = useNavigate();
-  const location = useLocation(); // Get current location
+  const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -142,6 +142,7 @@ const Navbar = () => {
             <ListItemButton
               component={RouterLink}
               to={link.path}
+              onClick={toggleDrawer(false)}
               sx={{
                 py: 1.5,
                 borderRadius: 1,
@@ -178,7 +179,17 @@ const Navbar = () => {
           </ListItemButton>
         </ListItem>
       </List>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <IconButton
+          onClick={toggleTheme}
+          color="inherit"
+          sx={{ 
+            color: theme.palette.primary.main,
+            '&:hover': { color: theme.palette.primary.light }
+          }}
+        >
+          {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+        </IconButton>
         <IconButton
           onClick={toggleDrawer(false)}
           color="inherit"
@@ -193,7 +204,6 @@ const Navbar = () => {
     </Box>
   );
 
-  // Conditionally render buttons based on current route
   const shouldShowAuthButtons = !currentUser && !['/register', '/login'].includes(location.pathname);
 
   return (
@@ -210,8 +220,8 @@ const Navbar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar 
-          disableGutters={isMobile ? false : true} // Enable gutters on mobile for padding
-          sx={{ px: isMobile ? 1 : 0 }} // Add padding on mobile
+          disableGutters={isMobile ? false : true}
+          sx={{ px: isMobile ? 1 : 0, minHeight: isMobile ? 56 : 64 }} 
         >
           {currentUser && isMobile && (
             <IconButton
@@ -221,17 +231,18 @@ const Navbar = () => {
               onClick={toggleDrawer(true)}
               sx={{ 
                 mr: 1,
+                p: 1,
                 color: mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary
               }}
             >
-              <MenuIcon />
+              <MenuIcon fontSize="medium" />
             </IconButton>
           )}
 
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <TheatersIcon sx={{ 
               mr: 1, 
-              fontSize: 32,
+              fontSize: isMobile ? 28 : 32,
               color: mode === 'dark' ? 'primary.main' : 'text.primary' 
             }} />
             <GradientText
@@ -242,7 +253,7 @@ const Navbar = () => {
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller logo text on mobile
+                fontSize: isMobile ? '1.1rem' : '1.5rem',
               }}
             >
               OceansFlixx
@@ -252,11 +263,10 @@ const Navbar = () => {
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center',
-            flexDirection: isMobile ? 'column' : 'row', // Stack vertically on mobile
-            gap: isMobile ? 1 : 0, // Add spacing between stacked buttons
+            gap: isMobile ? 0.5 : 1,
           }}>
             {currentUser && !isMobile && (
-              <Box sx={{ display: 'flex', mr: 2 }}>
+              <Box sx={{ display: 'flex', mr: 1 }}>
                 {navLinks.map((link) => (
                   <Button
                     key={link.title}
@@ -268,6 +278,7 @@ const Navbar = () => {
                       py: 1,
                       textTransform: 'none',
                       fontWeight: 500,
+                      fontSize: '0.875rem',
                     }}
                   >
                     {link.title}
@@ -281,13 +292,13 @@ const Navbar = () => {
                 onClick={toggleTheme} 
                 color="inherit" 
                 sx={{ 
-                  mr: isMobile ? 0 : 1, // Remove margin-right on mobile to save space
+                  p: isMobile ? 0.75 : 1,
                   ...(mode === 'light' && {
                     color: 'primary.main',
                   })
                 }}
               >
-                {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+                {mode === 'dark' ? <LightModeIcon fontSize={isMobile ? 'small' : 'medium'} /> : <DarkModeIcon fontSize={isMobile ? 'small' : 'medium'} />}
               </IconButton>
             </Tooltip>
 
@@ -298,7 +309,7 @@ const Navbar = () => {
                     onClick={handleMenu}
                     size="small"
                     sx={{ 
-                      ml: 1,
+                      p: isMobile ? 0.75 : 1,
                       ...(open && {
                         bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                       }),
@@ -309,10 +320,11 @@ const Navbar = () => {
                   >
                     <Avatar
                       sx={{
-                        width: 32,
-                        height: 32,
+                        width: isMobile ? 28 : 32,
+                        height: isMobile ? 28 : 32,
                         bgcolor: 'primary.main',
                         color: 'primary.contrastText',
+                        fontSize: isMobile ? '0.875rem' : '1rem',
                       }}
                     >
                       {currentUser.name?.charAt(0) || <AccountCircleIcon fontSize="small" />}
@@ -368,9 +380,8 @@ const Navbar = () => {
             ) : shouldShowAuthButtons && (
               <Box sx={{ 
                 display: 'flex', 
-                flexDirection: isMobile ? 'column' : 'row', // Stack buttons vertically on mobile
                 alignItems: 'center',
-                gap: isMobile ? 1 : 0, // Add spacing between stacked buttons
+                gap: isMobile ? 0.5 : 1,
               }}>
                 <Button
                   variant="text"
@@ -379,9 +390,9 @@ const Navbar = () => {
                   sx={{
                     textTransform: 'none',
                     fontWeight: 500,
-                    px: isMobile ? 1 : 2, // Reduce padding on mobile
-                    fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
-                    minWidth: isMobile ? 'auto' : '64px', // Allow button to shrink on mobile
+                    px: isMobile ? 0.75 : 2,
+                    fontSize: isMobile ? '0.8rem' : '0.875rem',
+                    minWidth: isMobile ? 'auto' : '64px',
                   }}
                 >
                   Login
@@ -391,16 +402,16 @@ const Navbar = () => {
                   component={RouterLink}
                   to="/register"
                   sx={{
-                    ml: isMobile ? 0 : 1, // Remove margin-left on mobile since stacked
+                    ml: isMobile ? 0.5 : 1,
                     textTransform: 'none',
                     fontWeight: 500,
-                    px: isMobile ? 1 : 2, // Reduce padding on mobile
-                    fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
+                    px: isMobile ? 0.75 : 2,
+                    fontSize: isMobile ? '0.8rem' : '0.875rem',
                     boxShadow: 'none',
                     '&:hover': {
                       boxShadow: 'none',
                     },
-                    minWidth: isMobile ? 'auto' : '64px', // Allow button to shrink on mobile
+                    minWidth: isMobile ? 'auto' : '64px',
                   }}
                 >
                   Register
@@ -419,8 +430,8 @@ const Navbar = () => {
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             background: theme.palette.mode === 'dark' 
-              ? 'rgba(18, 18, 18, 0.9)' 
-              : 'rgba(255, 255, 255, 0.9)',
+              ? 'rgba(18, 18, 18, 0.95)' 
+              : 'rgba(255, 255, 255, 0.95)',
           },
         }}
       >
