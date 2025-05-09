@@ -195,7 +195,7 @@ const MovieDetails = () => {
     : 'Unknown';
     
   const backdropPath = movie.backdrop_path 
-    ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}` // Using w780 for better mobile performance
+    ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
     : 'https://via.placeholder.com/1280x720?text=No+Image+Available';
 
   return (
@@ -222,7 +222,7 @@ const MovieDetails = () => {
             left: 0,
             zIndex: 0,
           }}
-          loading="lazy" // Lazy loading for performance
+          loading="lazy"
         />
         <Box sx={{ 
           position: 'absolute',
@@ -385,9 +385,9 @@ const MovieDetails = () => {
         </Container>
       </Box>
 
-      <Container maxWidth="lg">
-        {trailerOpen && trailer && (
-          <Box sx={{ mt: -4, mb: 6, position: 'relative', zIndex: 3 }}>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        {trailer && trailerOpen && (
+          <Box sx={{ mb: 6, position: 'relative', zIndex: 1 }}>
             <Paper elevation={6} sx={{ 
               borderRadius: 2,
               overflow: 'hidden',
@@ -395,7 +395,7 @@ const MovieDetails = () => {
             }}>
               <Box sx={{ 
                 position: 'relative', 
-                paddingBottom: '56.25%',
+                paddingBottom: { xs: '56.25%', md: '56.25%' }, // Responsive aspect ratio
                 height: 0,
                 overflow: 'hidden',
               }}>
@@ -408,7 +408,7 @@ const MovieDetails = () => {
                     height: '100%',
                     border: 0
                   }}
-                  src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1`}
+                  src={`https://www.youtube.com/embed/${trailer.key}`}
                   title={`${movie.title} Trailer`}
                   allowFullScreen
                 ></iframe>
@@ -475,7 +475,7 @@ const MovieDetails = () => {
                   sx={{
                     objectFit: 'cover',
                   }}
-                  loading="lazy" // Lazy loading for cast images
+                  loading="lazy"
                 />
                 <Box sx={{ p: 2 }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: theme.palette.text.primary }}>
