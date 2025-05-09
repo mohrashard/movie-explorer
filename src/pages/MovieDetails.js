@@ -195,8 +195,8 @@ const MovieDetails = () => {
     : 'Unknown';
     
   const backdropPath = movie.backdrop_path 
-    ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
-    : null;
+    ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}` // Using w780 for better mobile performance
+    : 'https://via.placeholder.com/1280x720?text=No+Image+Available';
 
   return (
     <Box sx={{ 
@@ -207,13 +207,24 @@ const MovieDetails = () => {
       {/* Hero Section */}
       <Box sx={{ 
         position: 'relative',
-        height: { xs: '50vh', md: '80vh' }, // Adjusted height for better mobile responsiveness
-        backgroundImage: backdropPath,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        '&::before': {
-          content: '""',
+        height: { xs: '50vh', md: '80vh' },
+        overflow: 'hidden',
+      }}>
+        <img
+          src={backdropPath}
+          alt={movie.title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 0,
+          }}
+          loading="lazy" // Lazy loading for performance
+        />
+        <Box sx={{ 
           position: 'absolute',
           top: 0,
           right: 0,
@@ -226,8 +237,7 @@ const MovieDetails = () => {
             ${theme.palette.background.default} 100%
           )`,
           zIndex: 1
-        }
-      }}>
+        }} />
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, pt: 2 }}>
           <IconButton 
             onClick={handleBack}
@@ -255,7 +265,6 @@ const MovieDetails = () => {
           pb: 6
         }}>
           <Grid container spacing={4} alignItems="flex-end">
-            {/* Removed poster Grid item for mobile */}
             <Grid item xs={12}>
               <Typography variant="h3" component="h1" sx={{ 
                 fontWeight: 700,
@@ -466,6 +475,7 @@ const MovieDetails = () => {
                   sx={{
                     objectFit: 'cover',
                   }}
+                  loading="lazy" // Lazy loading for cast images
                 />
                 <Box sx={{ p: 2 }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: theme.palette.text.primary }}>
