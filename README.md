@@ -1,70 +1,212 @@
-# Getting Started with Create React App
+# OceansFlixx - Movie Explorer Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![OceansFlixx Logo](public/oceanflixlogo.png)
 
-## Available Scripts
+## 🎬 Project Overview
 
-In the project directory, you can run:
+OceansFlixx is a responsive web application that allows users to search for movies, view details, and discover trending films. The application fetches real-time data from The Movie Database (TMDb) API to provide users with an interactive and engaging movie browsing experience.
 
-### `npm start`
+### 🔗 Live Demo
+[OceansFlixx Live Demo](https://oceansflixx.vercel.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 📁 Repository
+[GitHub Repository](https://github.com/mohrashard/movie-explorer.git)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Features
 
-### `npm test`
+- **User Authentication**
+  - Login and registration system with local storage persistence
+  - Protected routes for authenticated users
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Movie Discovery**
+  - Trending movies section displaying popular films
+  - Search functionality to find specific movies
+  - Infinite scrolling for search results
 
-### `npm run build`
+- **Movie Details**
+  - Comprehensive information about each movie (overview, genre, rating)
+  - Cast information
+  - Embedded trailer viewing
+  - Add/remove from favorites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **User Preferences**
+  - Light/Dark mode toggle
+  - Save favorite movies (persistent in local storage)
+  - Last search query persistence
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Advanced Features**
+  - Filter movies by genre, year, and rating
+  - Responsive design for all devices
+  - Graceful error handling
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Technologies Used
 
-### `npm run eject`
+- **Frontend Framework**
+  - React.js (Create React App)
+  
+- **State Management**
+  - React Context API
+  - Local Storage for persistence
+  
+- **UI/UX**
+  - Material-UI (MUI) components
+  - Custom CSS for enhanced styling
+  - Mobile-first responsive design
+  
+- **Routing**
+  - React Router for navigation
+  
+- **API Integration**
+  - Axios for HTTP requests
+  - TMDb API for movie data
+  
+- **Deployment**
+  - Vercel for hosting
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Node.js (v14 or higher)
+- npm or yarn package manager
+- TMDb API key (get one at [https://developers.themoviedb.org/3](https://developers.themoviedb.org/3))
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Installation
 
-## Learn More
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mohrashard/movie-explorer.git
+   cd movie-explorer
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Create a `.env` file in the root directory and add your TMDb API key:
+   ```
+   REACT_APP_TMDB_API_KEY=your_api_key_here
+   ```
 
-### Code Splitting
+4. Run the development server:
+   ```bash
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+5. The application will be available at `http://localhost:3000`
 
-### Analyzing the Bundle Size
+## 📂 Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+movie-explorer/
+├── public/
+│   ├── oceanflixlogo.png
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── FilterPanel.js
+│   │   ├── MovieCard.js
+│   │   ├── Navbar.js
+│   │   ├── ProtectedRoute.js
+│   │   └── SearchBar.js
+│   ├── contexts/
+│   │   ├── AuthContext.js
+│   │   ├── MovieContext.js
+│   │   └── ThemeContext.js
+│   ├── pages/
+│   │   ├── Favorites.js
+│   │   ├── Home.js
+│   │   ├── Login.js
+│   │   ├── MovieDetails.js
+│   │   ├── NotFound.js
+│   │   └── Register.js
+│   ├── services/
+│   │   └── api.js
+│   ├── utils/
+│   │   └── localStorage.js
+│   ├── styles/
+│   │   └── home.css
+│   ├── App.js
+│   └── index.js
+└── package.json
+```
 
-### Making a Progressive Web App
+## 🔌 API Integration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The application uses the TMDb API to fetch movie data. All API calls are handled through the `api.js` service which includes:
 
-### Advanced Configuration
+- `searchMovies(query, page)`: Search for movies based on query
+- `getTrending(page)`: Get trending movies for the week
+- `getMovieDetails(movieId)`: Get detailed information about a specific movie
+- `getMovieCredits(movieId)`: Get cast and crew information
+- `getMovieVideos(movieId)`: Get trailers and other video content
+- `getMoviesByGenre(genreId, page)`: Get movies filtered by genre
+- `getGenres()`: Get list of all genres
+- `discoverMovies(params)`: Get movies based on various filters
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The API service includes interceptors for request and response handling, with error management and retry capability for network issues.
 
-### Deployment
+## 🔒 Authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The application uses a simulated authentication system with local storage:
 
-### `npm run build` fails to minify
+- User registration stores credentials in local storage
+- Login validates against stored credentials
+- Protected routes ensure only authenticated users access certain pages
+- Authentication state is managed through React Context API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 💾 Local Storage Usage
+
+The application utilizes local storage for:
+
+- User authentication data
+- Favorite movies list
+- Last search query
+- Theme preference (light/dark mode)
+- TMDb API key fallback (if not in environment variables)
+
+## 📱 Responsive Design
+
+The application follows mobile-first design principles:
+
+- Adaptive layout for different screen sizes
+- Touchscreen-friendly UI elements
+- Optimized performance for mobile devices
+
+## 🚢 Deployment
+
+The application is deployed on Vercel:
+
+1. Connect your GitHub repository to Vercel
+2. Set up environment variables for the API key
+3. Deploy with default settings
+
+## 🧪 Running Tests
+
+To run tests:
+
+```bash
+npm test
+```
+
+## 📋 Future Enhancements
+
+- User profile customization
+- Social sharing functionality
+- Advanced filtering and sorting options
+- Movie recommendations based on user preferences
+- Watchlist feature
+- User ratings and reviews
+
+## 📄 License
+
+[MIT License](LICENSE)
+
+## 👨‍💻 Author
+
+Mohammad Rashard
+
+---
+
+This project was created as part of a web development assignment, implementing all required features and following best practices for React application development.
