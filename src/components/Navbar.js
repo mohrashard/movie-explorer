@@ -30,7 +30,7 @@ import {
   Logout as LogoutIcon,
   AccountCircle as AccountCircleIcon,
   Theaters as TheatersIcon,
-  Close as CloseIcon // Import CloseIcon for the drawer
+  Close as CloseIcon
 } from '@mui/icons-material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -177,7 +177,6 @@ const Navbar = () => {
           </ListItemButton>
         </ListItem>
       </List>
-      {/* Add Close Button */}
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
           onClick={toggleDrawer(false)}
@@ -206,7 +205,10 @@ const Navbar = () => {
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar 
+          disableGutters={isMobile ? false : true} // Enable gutters on mobile for padding
+          sx={{ px: isMobile ? 1 : 0 }} // Add padding on mobile
+        >
           {currentUser && isMobile && (
             <IconButton
               size="large"
@@ -215,7 +217,7 @@ const Navbar = () => {
               onClick={toggleDrawer(true)}
               sx={{ 
                 mr: 1,
-                color: mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary // Match icon color in light mode
+                color: mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary
               }}
             >
               <MenuIcon />
@@ -236,13 +238,19 @@ const Navbar = () => {
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
+                fontSize: isMobile ? '1.2rem' : '1.5rem', // Smaller logo text on mobile
               }}
             >
               OceansFlixx
             </GradientText>
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            flexDirection: isMobile ? 'column' : 'row', // Stack vertically on mobile
+            gap: isMobile ? 1 : 0, // Add spacing between stacked buttons
+          }}>
             {currentUser && !isMobile && (
               <Box sx={{ display: 'flex', mr: 2 }}>
                 {navLinks.map((link) => (
@@ -269,7 +277,7 @@ const Navbar = () => {
                 onClick={toggleTheme} 
                 color="inherit" 
                 sx={{ 
-                  mr: 1,
+                  mr: isMobile ? 0 : 1, // Remove margin-right on mobile to save space
                   ...(mode === 'light' && {
                     color: 'primary.main',
                   })
@@ -354,7 +362,12 @@ const Navbar = () => {
                 </Menu>
               </>
             ) : (
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: isMobile ? 'column' : 'row', // Stack buttons vertically on mobile
+                alignItems: 'center',
+                gap: isMobile ? 1 : 0, // Add spacing between stacked buttons
+              }}>
                 <Button
                   variant="text"
                   component={RouterLink}
@@ -362,7 +375,9 @@ const Navbar = () => {
                   sx={{
                     textTransform: 'none',
                     fontWeight: 500,
-                    px: 2,
+                    px: isMobile ? 1 : 2, // Reduce padding on mobile
+                    fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
+                    minWidth: isMobile ? 'auto' : '64px', // Allow button to shrink on mobile
                   }}
                 >
                   Login
@@ -372,13 +387,16 @@ const Navbar = () => {
                   component={RouterLink}
                   to="/register"
                   sx={{
-                    ml: 1,
+                    ml: isMobile ? 0 : 1, // Remove margin-left on mobile since stacked
                     textTransform: 'none',
                     fontWeight: 500,
+                    px: isMobile ? 1 : 2, // Reduce padding on mobile
+                    fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
                     boxShadow: 'none',
                     '&:hover': {
                       boxShadow: 'none',
                     },
+                    minWidth: isMobile ? 'auto' : '64px', // Allow button to shrink on mobile
                   }}
                 >
                   Register
