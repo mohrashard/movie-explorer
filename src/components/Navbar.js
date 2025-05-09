@@ -29,7 +29,8 @@ import {
   Favorite as FavoriteIcon,
   Logout as LogoutIcon,
   AccountCircle as AccountCircleIcon,
-  Theaters as TheatersIcon
+  Theaters as TheatersIcon,
+  Close as CloseIcon // Import CloseIcon for the drawer
 } from '@mui/icons-material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -176,6 +177,19 @@ const Navbar = () => {
           </ListItemButton>
         </ListItem>
       </List>
+      {/* Add Close Button */}
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <IconButton
+          onClick={toggleDrawer(false)}
+          color="inherit"
+          sx={{ 
+            color: theme.palette.primary.main,
+            '&:hover': { color: theme.palette.primary.light }
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
     </Box>
   );
 
@@ -199,7 +213,10 @@ const Navbar = () => {
               edge="start"
               color="inherit"
               onClick={toggleDrawer(true)}
-              sx={{ mr: 1 }}
+              sx={{ 
+                mr: 1,
+                color: mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary // Match icon color in light mode
+              }}
             >
               <MenuIcon />
             </IconButton>
@@ -224,7 +241,6 @@ const Navbar = () => {
               OceansFlixx
             </GradientText>
           </Box>
-
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {currentUser && !isMobile && (
