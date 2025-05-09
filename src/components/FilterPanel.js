@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Paper,
   Typography,
   Slider,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   TextField,
@@ -17,7 +16,6 @@ import {
   Chip,
   Tooltip,
   IconButton,
-  Rating,
   OutlinedInput
 } from '@mui/material';
 import {
@@ -28,8 +26,9 @@ import {
 } from '@mui/icons-material';
 import { getGenres } from '../services/api';
 import { alpha } from '@mui/material/styles';
+import debounce from 'lodash/debounce'; // Import debounce from lodash
 
-const FilterPanel = ({ onApplyFilters }) => {
+const FilterPanel = React.memo(({ onApplyFilters }) => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
   const [genres, setGenres] = useState([]);
@@ -52,27 +51,139 @@ const FilterPanel = ({ onApplyFilters }) => {
     fetchGenres();
   }, []);
 
-  const handleExpandClick = () => setExpanded(!expanded);
+  const handleExpandClick = useCallback(() => {
+    setExpanded(prev => !prev);
+  }, []);
 
-  const handleFilterChange = (field, value) => {
-    setFilters(prev => ({ ...prev, [field]: value }));
-  };
+  // Debounced function for handling rating changes to reduce re-renders
+  const debouncedHandleRatingChange = useMemo(
+    () =>
+      debounce((newValue) => {
+        setFilters(prev => ({ ...prev, rating: newValue }));
+      }, 150),
+    []
+  );
 
-  const handleClearFilters = () => {
+  const handleFilterChange = useCallback((field, value) => {
+    if (field === 'rating') {
+      debouncedHandleRatingChange(value);
+    } else {
+      setFilters(prev => ({ ...prev, [field]: value }));
+    }
+  }, [debouncedHandleRatingChange]);
+
+  const handleClearFilters = useCallback(() => {
     setFilters({
       genre: "",
       yearFrom: 2000,
       yearTo: new Date().getFullYear(),
       rating: [0, 10]
     });
-  };
+  }, []);
 
-  const handleApplyFilters = () => onApplyFilters(filters);
+  const handleApplyFilters = useCallback(() => {
+    onApplyFilters(filters);
+  }, [filters, onApplyFilters]);
 
-  // Format rating for display
-  const formatRating = (value) => {
+  // Memoized formatRating to prevent unnecessary re-computations
+  const formatRating = useCallback((value) => {
     return value.toFixed(1);
-  };
+  }, []);
+
+  // Memoized rating indicators to prevent re-rendering on every state change
+  const renderRatingIndicators = useMemo(() => {
+    const minRating = filters.rating[0];
+    const maxRating = filters.rating[1];
+
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, px: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              mr: 0.5 
+            }}
+          >
+            Min: 
+          </Typography>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            backgroundColor: alpha(theme.palette.primary.main, 0.1),
+            borderRadius: 1,
+            px: 1,
+            py: 0.5
+          }}>
+            {[...Array(5)].map((_, index) => (
+              <Box 
+                key={index}
+                sx={{ 
+                  width: 16, 
+                  height: 16,
+                  borderRadius: '50%',
+                  mx: 0.25,
+                  backgroundColor: index < minRating / 2 
+                    ? theme.palette.primary.main 
+                    : alpha(theme.palette.primary.main, 0.2)
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              mr: 0.5 
+            }}
+          >
+            Max: 
+          </Typography>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            backgroundColor: alpha(theme.palette.primary.main, 0.1),
+            borderRadius: 1,
+            px: 1,
+            py: 0.5
+          }}>
+            {[...Array(5)].map((_, index) => (
+              <Box 
+                key={index}
+                sx={{ 
+                  width: 16, 
+                  height: 16,
+                  borderRadius: '50%',
+                  mx: 0.25,
+                  backgroundColor: index < maxRating / 2 
+                    ? theme.palette.primary.main 
+                    : alpha(theme.palette.primary.main, 0.2)
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    );
+  }, [filters.rating, theme.palette.primary.main]);
+
+  // Memoized genre options to prevent re-rendering on every state change
+  const genreOptions = useMemo(() => {
+    return [
+      <MenuItem key="all" value="">
+        <em>All Genres</em>
+      </MenuItem>,
+      ...genres.map((genre) => (
+        <MenuItem key={genre.id} value={genre.id}>
+          {genre.name}
+        </MenuItem>
+      ))
+    ];
+  }, [genres]);
 
   return (
     <Paper
@@ -134,7 +245,7 @@ const FilterPanel = ({ onApplyFilters }) => {
       <Collapse in={expanded} timeout={300}>
         <Box sx={{ p: 3 }}>
           <Grid container spacing={3}>
-            {/* Genre Filter - Improved with Tooltip */}
+            {/* Genre Filter */}
             <Grid item xs={12} md={3}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Typography variant="body2" sx={{ fontWeight: 500, mr: 1 }}>Genre</Typography>
@@ -187,19 +298,12 @@ const FilterPanel = ({ onApplyFilters }) => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>All Genres</em>
-                  </MenuItem>
-                  {genres.map((genre) => (
-                    <MenuItem key={genre.id} value={genre.id}>
-                      {genre.name}
-                    </MenuItem>
-                  ))}
+                  {genreOptions}
                 </Select>
               </FormControl>
             </Grid>
 
-            {/* Year Range Filter - Improved with better validation */}
+            {/* Year Range Filter */}
             <Grid item xs={12} md={4}>
               <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>Release Year</Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -209,12 +313,10 @@ const FilterPanel = ({ onApplyFilters }) => {
                   size="small"
                   value={filters.yearFrom}
                   onChange={(e) => {
-                    // Allow direct typing of any value
                     const inputValue = e.target.value;
                     setFilters(prev => ({ ...prev, yearFrom: inputValue }));
                   }}
                   onBlur={() => {
-                    // Validate and correct on blur
                     let value = parseInt(filters.yearFrom);
                     if (isNaN(value) || value < 1900) {
                       value = 1900;
@@ -241,12 +343,10 @@ const FilterPanel = ({ onApplyFilters }) => {
                   size="small"
                   value={filters.yearTo}
                   onChange={(e) => {
-                    // Allow direct typing of any value
                     const inputValue = e.target.value;
                     setFilters(prev => ({ ...prev, yearTo: inputValue }));
                   }}
                   onBlur={() => {
-                    // Validate and correct on blur
                     let value = parseInt(filters.yearTo);
                     if (isNaN(value) || value > new Date().getFullYear()) {
                       value = new Date().getFullYear();
@@ -270,7 +370,7 @@ const FilterPanel = ({ onApplyFilters }) => {
               </Box>
             </Grid>
 
-            {/* Rating Slider - Improved with visual rating indicator */}
+            {/* Rating Slider */}
             <Grid item xs={12} md={5}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Typography variant="body2" sx={{ fontWeight: 500, mr: 1 }}>Rating</Typography>
@@ -339,79 +439,7 @@ const FilterPanel = ({ onApplyFilters }) => {
                 />
               </Box>
               
-              {/* Improved visual representation of ratings with custom indicators */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, px: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      fontWeight: 600,
-                      color: theme.palette.primary.main,
-                      mr: 0.5 
-                    }}
-                  >
-                    Min: 
-                  </Typography>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                    borderRadius: 1,
-                    px: 1,
-                    py: 0.5
-                  }}>
-                    {[...Array(5)].map((_, index) => (
-                      <Box 
-                        key={index}
-                        sx={{ 
-                          width: 16, 
-                          height: 16,
-                          borderRadius: '50%',
-                          mx: 0.25,
-                          backgroundColor: index < filters.rating[0]/2 
-                            ? theme.palette.primary.main 
-                            : alpha(theme.palette.primary.main, 0.2)
-                        }}
-                      />
-                    ))}
-                  </Box>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      fontWeight: 600,
-                      color: theme.palette.primary.main,
-                      mr: 0.5 
-                    }}
-                  >
-                    Max: 
-                  </Typography>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                    borderRadius: 1,
-                    px: 1,
-                    py: 0.5
-                  }}>
-                    {[...Array(5)].map((_, index) => (
-                      <Box 
-                        key={index}
-                        sx={{ 
-                          width: 16, 
-                          height: 16,
-                          borderRadius: '50%',
-                          mx: 0.25,
-                          backgroundColor: index < filters.rating[1]/2 
-                            ? theme.palette.primary.main 
-                            : alpha(theme.palette.primary.main, 0.2)
-                        }}
-                      />
-                    ))}
-                  </Box>
-                </Box>
-              </Box>
+              {renderRatingIndicators}
             </Grid>
 
             {/* Action Buttons */}
@@ -454,6 +482,6 @@ const FilterPanel = ({ onApplyFilters }) => {
       </Collapse>
     </Paper>
   );
-};
+});
 
 export default FilterPanel;
