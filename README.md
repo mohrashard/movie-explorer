@@ -9,9 +9,9 @@ OceansFlixx is a responsive web application that allows users to search for movi
 ### 🔗 Live Demo
 [OceansFlixx Live Demo](https://oceansflixx.vercel.app/)
 
-### 📁 Repository
-[GitHub Repository](https://github.com/mohrashard/movie-explorer.git)
-[GitLab Repository](https://gitlab.com/mohrashard/movie-explorer.git)
+### 📁 Repository Links
+- [GitHub Repository](https://github.com/mohrashard/movie-explorer.git)
+- [GitLab Repository](https://gitlab.com/mohrashard/movie-explorer.git)
 
 ## ✨ Features
 
