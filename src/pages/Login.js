@@ -23,7 +23,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect mobile screens
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,29 +45,29 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth={isMobile ? 'xs' : 'sm'}> {/* Adjust maxWidth for mobile */}
+    <Container maxWidth={isMobile ? 'xs' : 'sm'}> 
       <Box sx={{ 
-        mt: isMobile ? 4 : 8, // Reduce top margin on mobile
-        mb: isMobile ? 2 : 4, // Reduce bottom margin on mobile
+        mt: isMobile ? 4 : 8,
+        mb: isMobile ? 2 : 4, 
         display: 'flex',
         justifyContent: 'center',
       }}>
         <Paper 
           elevation={3} 
           sx={{ 
-            p: isMobile ? 2 : 4, // Reduce padding on mobile
+            p: isMobile ? 2 : 4,
             display: 'flex', 
             flexDirection: 'column', 
             alignItems: 'center',
-            borderRadius: 2, // Slightly rounded corners for better aesthetics
+            borderRadius: 2, 
             width: '100%',
           }}
         >
           <Typography 
             component="h1" 
-            variant={isMobile ? 'h6' : 'h5'} // Smaller heading on mobile
+            variant={isMobile ? 'h6' : 'h5'} 
             sx={{ 
-              mb: isMobile ? 2 : 3, // Adjust margin below heading
+              mb: isMobile ? 2 : 3,
               fontWeight: 600,
               textAlign: 'center',
             }}
@@ -81,7 +81,7 @@ const Login = () => {
               sx={{ 
                 width: '100%', 
                 mb: 2,
-                fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
+                fontSize: isMobile ? '0.85rem' : '0.875rem',
               }}
             >
               {error}
@@ -106,13 +106,13 @@ const Login = () => {
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              size={isMobile ? 'small' : 'medium'} // Smaller input fields on mobile
+              size={isMobile ? 'small' : 'medium'} 
               sx={{
                 '& .MuiInputBase-root': {
-                  fontSize: isMobile ? '0.9rem' : '1rem', // Adjust font size
+                  fontSize: isMobile ? '0.9rem' : '1rem',
                 },
                 '& .MuiInputLabel-root': {
-                  fontSize: isMobile ? '0.9rem' : '1rem', // Adjust label font size
+                  fontSize: isMobile ? '0.9rem' : '1rem', 
                 },
               }}
             />
@@ -142,10 +142,10 @@ const Login = () => {
               fullWidth
               variant="contained"
               sx={{ 
-                mt: isMobile ? 2 : 3, // Adjust margin-top
-                mb: isMobile ? 1 : 2, // Adjust margin-bottom
-                py: isMobile ? 1 : 1.5, // Smaller button height on mobile
-                fontSize: isMobile ? '0.9rem' : '1rem', // Smaller font on mobile
+                mt: isMobile ? 2 : 3, 
+                mb: isMobile ? 1 : 2, 
+                py: isMobile ? 1 : 1.5, 
+                fontSize: isMobile ? '0.9rem' : '1rem', 
                 borderRadius: 1,
               }}
               disabled={loading}
@@ -158,7 +158,7 @@ const Login = () => {
                 to="/register" 
                 variant="body2"
                 sx={{
-                  fontSize: isMobile ? '0.85rem' : '0.875rem', // Smaller font on mobile
+                  fontSize: isMobile ? '0.85rem' : '0.875rem', 
                   textDecoration: 'none',
                   '&:hover': {
                     textDecoration: 'underline',

@@ -15,11 +15,10 @@ const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [localLoading, setLocalLoading] = useState(false);
 
-  // Initialize search query from lastSearch if it exists
   useEffect(() => {
     if (lastSearch) {
       setSearchQuery(lastSearch);
-      // Don't auto-search on component mount, as this causes infinite loading issues
+   
     }
   }, [lastSearch]);
 
@@ -42,7 +41,6 @@ const SearchBar = () => {
     clearSearchResults();
   };
 
-  // Use localLoading state to prevent UI issues
   const isLoading = localLoading || loading;
 
   return (

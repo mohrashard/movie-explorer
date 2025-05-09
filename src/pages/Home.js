@@ -94,17 +94,16 @@ const Home = () => {
 
     setActiveFilters(filters);
     setIsFiltering(true);
-    setPage(1); // Reset page when applying new filters
+    setPage(1); 
 
     let moviesToFilter = [];
     
-    // If genre filter is applied, we need to fetch movies by genre first
+
     if (filters.genre) {
       try {
         const response = await getMoviesByGenre(filters.genre, 1);
         if (response && response.data) {
           moviesToFilter = response.data.results;
-          // Apply other filters to these results
           const filtered = filterMoviesByUserCriteria(moviesToFilter, filters);
           setFilteredMovies(filtered);
           setHasMore(filtered.length > 0 && response.data.total_pages > 1);
@@ -113,27 +112,27 @@ const Home = () => {
         console.error("Error fetching movies by genre:", error);
       }
     } else {
-      // If no genre filter, apply filters to current movie list
+    
       moviesToFilter = searchResults.length > 0 ? searchResults : trendingMovies;
       const filtered = filterMoviesByUserCriteria(moviesToFilter, filters);
       setFilteredMovies(filtered);
-      setHasMore(false); // No more loading when filtering existing results
+      setHasMore(false); 
     }
   };
 
-  // Helper function to filter movies by year and rating
+
   const filterMoviesByUserCriteria = (movies, filters) => {
     return movies.filter(movie => {
-      // Filter by year
+
       const releaseYear = movie.release_date 
         ? new Date(movie.release_date).getFullYear() 
         : null;
       
       const yearMatch = releaseYear 
         ? releaseYear >= filters.yearFrom && releaseYear <= filters.yearTo 
-        : true; // If no release date, don't filter by year
+        : true; 
       
-      // Filter by rating
+ 
       const ratingMatch = movie.vote_average >= filters.rating[0] && 
                          movie.vote_average <= filters.rating[1];
       
@@ -141,7 +140,7 @@ const Home = () => {
     });
   };
 
-  // Determine which movies to display
+
   let moviesToDisplay = [];
   let title = '';
 

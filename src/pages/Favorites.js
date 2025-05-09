@@ -105,7 +105,7 @@ const Favorites = () => {
 
   const groupedFavorites = groupMoviesByGenre();
 
-  // For debugging purposes
+
   console.log("Normalized favorites:", normalizedFavorites);
 
   return (

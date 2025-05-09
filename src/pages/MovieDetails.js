@@ -207,8 +207,8 @@ const MovieDetails = () => {
       {/* Hero Section */}
       <Box sx={{ 
         position: 'relative',
-        minHeight: { xs: '50vh', md: '80vh' }, // Changed from height to minHeight
-        overflow: 'visible', // Allow content to overflow naturally
+        minHeight: { xs: '50vh', md: '80vh' }, 
+        overflow: 'visible', 
       }}>
         <img
           src={backdropPath}
@@ -261,8 +261,8 @@ const MovieDetails = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
-          pb: { xs: 8, md: 10 }, // Increased padding-bottom for longer content
-          pt: 4 // Added padding-top to balance spacing
+          pb: { xs: 8, md: 10 }, 
+          pt: 4 
         }}>
           <Grid container spacing={4} alignItems="flex-end">
             <Grid item xs={12}>
@@ -373,7 +373,7 @@ const MovieDetails = () => {
                   maxWidth: { xs: '100%', md: '70%' },
                   lineHeight: 1.6,
                   fontSize: { xs: '0.9rem', sm: '1rem' },
-                  whiteSpace: 'pre-wrap', // Ensure text wraps naturally
+                  whiteSpace: 'pre-wrap', 
                 }}
               >
                 {movie.overview || 'No overview available.'}

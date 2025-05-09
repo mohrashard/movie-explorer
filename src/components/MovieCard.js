@@ -29,7 +29,7 @@ import { useTheme as useCustomTheme } from '../contexts/ThemeContext'; // Import
 const MovieCard = ({ movie, onRemove }) => {
   const { addToFavorites, removeFromFavorites, checkIsFavorite } = useMovie();
   const theme = useTheme();
-  const { mode } = useCustomTheme(); // Access the theme mode (light or dark)
+  const { mode } = useCustomTheme(); 
   
   const isFavorite = checkIsFavorite(movie.id);
   

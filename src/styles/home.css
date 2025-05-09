@@ -1,6 +1,6 @@
-/* Ocean-inspired color palette with light/dark variables */
+
 :root {
-    /* Dark theme (default) */
+ 
     --deep-blue: #0a192f;
     --midnight-blue: #112240;
     --ocean-blue: #1f4287;
@@ -11,7 +11,7 @@
     --black: #121212;
     --shadow: rgba(0, 0, 0, 0.2);
     
-    /* Theme-specific variables */
+
     --bg-primary: var(--deep-blue);
     --bg-secondary: var(--midnight-blue);
     --bg-element: rgba(17, 34, 64, 0.8);
@@ -23,7 +23,7 @@
     --shadow-intense: rgba(0, 0, 0, 0.3);
   }
   
-  /* Light theme variables */
+
   [data-theme="light"] {
     --bg-primary: var(--off-white);
     --bg-secondary: var(--white);
@@ -36,7 +36,7 @@
     --shadow-intense: rgba(0, 0, 0, 0.15);
   }
   
-  /* Base styles */
+
   * {
     margin: 0;
     padding: 0;
@@ -59,7 +59,7 @@
     overflow: hidden;
   }
   
-  /* Ocean background with animated waves */
+
   .ocean-bg {
     position: fixed;
     top: 0;

@@ -1,20 +1,18 @@
-// Favorites storage functions
+
 export const saveFavorite = (movie) => {
   try {
     const favorites = getFavorites();
     
-    // Check if movie already exists in favorites
+
     if (!favorites.some(fav => fav.id === movie.id)) {
-      // Ensure we store all necessary movie properties
       const movieToStore = {
         id: movie.id,
         title: movie.title,
         poster_path: movie.poster_path,
         vote_average: movie.vote_average,
         release_date: movie.release_date,
-        // Ensure overview is never null or undefined
         overview: movie.overview || 'No description available.',
-        // Include genres if available (might be needed for grouping in favorites)
+     
         genres: movie.genres || []
       };
       
@@ -29,7 +27,6 @@ export const saveFavorite = (movie) => {
   }
 };
 
-// Remove a movie from favorites
 export const removeFavorite = (movieId) => {
   try {
     const favorites = getFavorites();
@@ -42,18 +39,18 @@ export const removeFavorite = (movieId) => {
   }
 };
 
-// Get all favorites
+
 export const getFavorites = () => {
   try {
     const favorites = localStorage.getItem('favorites');
     const parsedFavorites = favorites ? JSON.parse(favorites) : [];
     
-    // Normalize data - ensure all movies have required properties
+ 
     return parsedFavorites.map(movie => ({
       ...movie,
-      // Make sure overview is always a string
+
       overview: movie.overview || 'No description available.',
-      // Ensure genres exist
+
       genres: movie.genres || []
     }));
   } catch (error) {
@@ -62,7 +59,7 @@ export const getFavorites = () => {
   }
 };
 
-// Check if a movie is in favorites
+
 export const isFavorite = (movieId) => {
   try {
     const favorites = getFavorites();
@@ -73,7 +70,7 @@ export const isFavorite = (movieId) => {
   }
 };
 
-// Save last search query
+
 export const saveLastSearch = (query) => {
   try {
     localStorage.setItem('lastSearch', query);
@@ -84,7 +81,7 @@ export const saveLastSearch = (query) => {
   }
 };
 
-// Get last search query
+
 export const getLastSearch = () => {
   try {
     return localStorage.getItem('lastSearch') || '';
@@ -94,7 +91,7 @@ export const getLastSearch = () => {
   }
 };
 
-// Clear last search query
+
 export const clearLastSearch = () => {
   try {
     localStorage.removeItem('lastSearch');
@@ -105,7 +102,7 @@ export const clearLastSearch = () => {
   }
 };
 
-// Filter storage functions
+
 export const saveFilters = (filters) => {
   try {
     localStorage.setItem('movieFilters', JSON.stringify(filters));
@@ -120,7 +117,7 @@ export const getFilters = () => {
   try {
     const filters = localStorage.getItem('movieFilters');
     if (!filters) {
-      // Return default filter values if none are saved
+    
       return {
         genre: "",
         yearFrom: 2000,
@@ -131,7 +128,7 @@ export const getFilters = () => {
     return JSON.parse(filters);
   } catch (error) {
     console.error('Error getting filters:', error);
-    // Return default filter values on error
+
     return {
       genre: "",
       yearFrom: 2000,
