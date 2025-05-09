@@ -11,6 +11,7 @@ OceansFlixx is a responsive web application that allows users to search for movi
 
 ### 📁 Repository
 [GitHub Repository](https://github.com/mohrashard/movie-explorer.git)
+[GitLab Repository](https://gitlab.com/mohrashard/movie-explorer.git)
 
 ## ✨ Features
 
