@@ -44,22 +44,32 @@ OceansFlixx is a responsive web application that allows users to search for movi
 
 - **Frontend Framework**
   - React.js (Create React App)
+  - Version: 18.2.0
   
 - **State Management**
   - React Context API
   - Local Storage for persistence
   
 - **UI/UX**
-  - Material-UI (MUI) components
+  - Material-UI (MUI) components v5.11.0
   - Custom CSS for enhanced styling
+  - Emotion for styled components
   - Mobile-first responsive design
   
 - **Routing**
-  - React Router for navigation
+  - React Router v6.6.1 for navigation
   
 - **API Integration**
-  - Axios for HTTP requests
+  - Axios v1.2.1 for HTTP requests
   - TMDb API for movie data
+  
+- **Testing**
+  - Jest for unit and integration tests
+  - React Testing Library for component tests
+  
+- **Development Tools**
+  - ESLint for code quality
+  - Prettier for code formatting
   
 - **Deployment**
   - Vercel for hosting
@@ -74,15 +84,25 @@ OceansFlixx is a responsive web application that allows users to search for movi
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository (choose one):
+   
+   **From GitHub:**
    ```bash
    git clone https://github.com/mohrashard/movie-explorer.git
+   cd movie-explorer
+   ```
+   
+   **From GitLab:**
+   ```bash
+   git clone https://gitlab.com/mohrashard/movie-explorer.git
    cd movie-explorer
    ```
 
 2. Install dependencies:
    ```bash
    npm install
+   # OR if using yarn
+   yarn install
    ```
 
 3. Create a `.env` file in the root directory and add your TMDb API key:
@@ -93,9 +113,22 @@ OceansFlixx is a responsive web application that allows users to search for movi
 4. Run the development server:
    ```bash
    npm start
+   # OR if using yarn
+   yarn start
    ```
 
 5. The application will be available at `http://localhost:3000`
+
+### Build for Production
+
+To create a production build:
+```bash
+npm run build
+# OR if using yarn
+yarn build
+```
+
+The optimized build will be available in the `build` directory.
 
 ## 📂 Project Structure
 
@@ -159,13 +192,21 @@ The application uses a simulated authentication system with local storage:
 
 ## 💾 Local Storage Usage
 
-The application utilizes local storage for:
+The application utilizes local storage for persistent data management:
 
-- User authentication data
-- Favorite movies list
-- Last search query
-- Theme preference (light/dark mode)
-- TMDb API key fallback (if not in environment variables)
+### Local Storage Keys
+- `oceansflixx_user`: User authentication data (email, username, password hash)
+- `oceansflixx_favorites`: Array of user's favorite movie IDs and basic info
+- `oceansflixx_lastSearch`: Last search query for quick resume
+- `oceansflixx_theme`: User's theme preference (light/dark mode)
+- `oceansflixx_apiKey`: TMDb API key fallback (if not in environment variables)
+
+### Data Management
+The application includes utility functions in `src/utils/localStorage.js` for:
+- Safe storage with error handling
+- Data retrieval with fallbacks
+- Data expiration management
+- Storage quota management
 
 ## 📱 Responsive Design
 
@@ -177,19 +218,81 @@ The application follows mobile-first design principles:
 
 ## 🚢 Deployment
 
-The application is deployed on Vercel:
+### Vercel Deployment (Recommended)
+The application is currently deployed on Vercel:
 
-1. Connect your GitHub repository to Vercel
-2. Set up environment variables for the API key
+1. Connect your GitHub or GitLab repository to Vercel
+2. Set up environment variables for the API key:
+   - Name: `REACT_APP_TMDB_API_KEY`
+   - Value: Your TMDb API key
 3. Deploy with default settings
+4. Access your deployed application at the provided Vercel URL
 
-## 🧪 Running Tests
+### Alternative Deployment Options
 
-To run tests:
+#### Netlify
+1. Connect your GitHub or GitLab repository to Netlify
+2. Set build command: `npm run build` or `yarn build`
+3. Set publish directory: `build`
+4. Add environment variable for the API key
+5. Deploy with default settings
+
+#### GitHub Pages
+1. Install gh-pages package:
+   ```bash
+   npm install --save-dev gh-pages
+   # OR
+   yarn add --dev gh-pages
+   ```
+2. Add homepage field to package.json:
+   ```json
+   "homepage": "https://yourusername.github.io/movie-explorer"
+   ```
+3. Add deploy scripts to package.json:
+   ```json
+   "scripts": {
+     "predeploy": "npm run build",
+     "deploy": "gh-pages -d build",
+     ...
+   }
+   ```
+4. Deploy the application:
+   ```bash
+   npm run deploy
+   # OR
+   yarn deploy
+   ```
+
+## 🧪 Testing
+
+### Running Tests
+To run the test suite:
 
 ```bash
 npm test
+# OR if using yarn
+yarn test
 ```
+
+### Running Tests in Watch Mode
+For development with continuous test feedback:
+
+```bash
+npm test -- --watch
+# OR if using yarn
+yarn test --watch
+```
+
+### Test Coverage Report
+To generate a coverage report:
+
+```bash
+npm test -- --coverage
+# OR if using yarn
+yarn test --coverage
+```
+
+The coverage report will be available in the `coverage` directory.
 
 ## 📋 Future Enhancements
 
