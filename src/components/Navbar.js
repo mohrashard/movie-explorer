@@ -32,7 +32,7 @@ import {
   Theaters as TheatersIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../contexts/ThemeContext';
@@ -64,6 +64,7 @@ const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const { mode, toggleTheme } = useCustomTheme();
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -191,6 +192,9 @@ const Navbar = () => {
       </Box>
     </Box>
   );
+
+  // Conditionally render buttons based on current route
+  const shouldShowAuthButtons = !currentUser && !['/register', '/login'].includes(location.pathname);
 
   return (
     <AppBar 
@@ -361,7 +365,7 @@ const Navbar = () => {
                   </MenuItem>
                 </Menu>
               </>
-            ) : (
+            ) : shouldShowAuthButtons && (
               <Box sx={{ 
                 display: 'flex', 
                 flexDirection: isMobile ? 'column' : 'row', // Stack buttons vertically on mobile
