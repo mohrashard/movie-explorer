@@ -207,10 +207,11 @@ const MovieDetails = () => {
       {/* Hero Section */}
       <Box sx={{ 
         position: 'relative',
-        height: { xs: '70vh', md: '80vh' },
+        height: { xs: '50vh', md: '80vh' }, // Adjusted height for better mobile responsiveness
         backgroundImage: backdropPath,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -254,32 +255,14 @@ const MovieDetails = () => {
           pb: 6
         }}>
           <Grid container spacing={4} alignItems="flex-end">
-            {isMobile && (
-              <Grid item xs={4}>
-                <Card sx={{ 
-                  borderRadius: 2,
-                  boxShadow: theme.shadows[8],
-                  overflow: 'hidden'
-                }}>
-                  <CardMedia
-                    component="img"
-                    image={
-                      movie.poster_path 
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : 'https://via.placeholder.com/500x750?text=No+Image+Available'
-                    }
-                    alt={movie.title}
-                  />
-                </Card>
-              </Grid>
-            )}
-            
-            <Grid item xs={isMobile ? 8 : 12}>
+            {/* Removed poster Grid item for mobile */}
+            <Grid item xs={12}>
               <Typography variant="h3" component="h1" sx={{ 
                 fontWeight: 700,
                 color: theme.palette.getContrastText(theme.palette.background.default),
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                mb: 1
+                mb: 1,
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' }
               }}>
                 {movie.title}
               </Typography>
@@ -316,7 +299,7 @@ const MovieDetails = () => {
                 </Box>
               </Box>
               
-              <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
                 {trailer && (
                   <Button 
                     variant="contained"
@@ -378,7 +361,12 @@ const MovieDetails = () => {
                 sx={{ 
                   color: theme.palette.text.primary,
                   textShadow: theme.palette.mode === 'dark' ? '0 1px 2px rgba(255,255,255,0.1)' : '0 1px 2px rgba(0,0,0,0.4)',
-                  maxWidth: { xs: '100%', md: '70%' }
+                  maxWidth: { xs: '100%', md: '70%' },
+                  display: '-webkit-box',
+                  WebkitLineClamp: { xs: 3, sm: 5 },
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}
               >
                 {movie.overview || 'No overview available.'}
