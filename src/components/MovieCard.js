@@ -24,12 +24,13 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useMovie } from '../contexts/MovieContext';
 import { Link } from 'react-router-dom';
+import { useTheme as useCustomTheme } from '../contexts/ThemeContext'; // Import custom theme hook
 
 const MovieCard = ({ movie, onRemove }) => {
   const { addToFavorites, removeFromFavorites, checkIsFavorite } = useMovie();
   const theme = useTheme();
+  const { mode } = useCustomTheme(); // Access the theme mode (light or dark)
   
-  // Important: Use the current value from the utility function
   const isFavorite = checkIsFavorite(movie.id);
   
   const posterUrl = movie.poster_path
@@ -52,7 +53,7 @@ const MovieCard = ({ movie, onRemove }) => {
   };
 
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
-  const rating = movie.vote_average ? movie.vote_average / 2 : 0; // Convert to 5-star scale
+  const rating = movie.vote_average ? movie.vote_average / 2 : 0;
 
   return (
     <Card 
@@ -122,8 +123,16 @@ const MovieCard = ({ movie, onRemove }) => {
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           {isFavorite ? 
-            <FavoriteIcon color="error" /> : 
-            <FavoriteBorderIcon />
+            <FavoriteIcon 
+              sx={{ 
+                color: mode === 'light' ? '#f44336' : '#e57373' 
+              }} 
+            /> : 
+            <FavoriteBorderIcon 
+              sx={{ 
+                color: mode === 'light' ? 'dark blue' : '#0a192f' 
+              }} 
+            />
           }
         </IconButton>
 
